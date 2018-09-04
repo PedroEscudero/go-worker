@@ -1,0 +1,16 @@
+version: "3.2"
+services:
+    rabbitmq-server:
+        build: ./rabbitmq-server
+
+    go-service:
+        build: ./go-service
+        depends_on:
+            - rabbitmq-server
+        tty: true
+        volumes:
+            - './go-service:/go-service'
+
+# Host volumes used to store code.
+volumes:
+    go-service: 
