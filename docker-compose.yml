@@ -2,15 +2,26 @@ version: "3.2"
 services:
     rabbitmq-server:
         build: ./rabbitmq-server
-
+        networks:
+          static-network:
+            ipv4_address: 192.20.128.2
+        expose:
+          - 5672
+        ports:
+          - "5672:5672"
+          - "25672:25672"
     go-service:
         build: ./go-service
+        networks:
+          static-network:
+            ipv4_address: 192.20.128.3
         depends_on:
             - rabbitmq-server
         tty: true
         volumes:
             - './go-service:/go-service'
-
-# Host volumes used to store code.
-volumes:
-    go-service: 
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 192.20.0.0/16
